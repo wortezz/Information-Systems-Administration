@@ -1,0 +1,11 @@
+---
+- name: Copy new hostname file
+  template:
+    src: hostname.j2
+    dest: /etc/hostname
+    owner: root
+    group: root
+    mode: '0644'
+    
+- name: Apply new hostname
+  command: hostnamectl set-hostname denys-bohdan-lab2

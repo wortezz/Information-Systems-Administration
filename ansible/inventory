@@ -1,0 +1,2 @@
+[hosts]
+remote_host ansible_host=192.168.1.113 ansible_user=denis ansible_ssh_private_key_file_=~/.ssh/id_rsa
