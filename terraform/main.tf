@@ -1,14 +1,19 @@
-resource "virtualbox_vm" "example" {
-  name  = "Denis"
-  image = "https://app.vagrantup.com/generic/boxes/ubuntu2204/versions/4.3.0/providers/virtualbox.box"
+provider "aws" {
+  region = var.region
+}
 
-  memory     = "1024 mib"
-  cpus       = "1"
-  boot_order = ["disk"]
+resource "aws_instance" "denis" {
+  count         = 2
+  ami           = lookup(var.ec2_ami, var.region)
+  instance_type = var.instance_type
 
-  network_adapter {
-    type           = "bridged"
-    host_interface = "Intel(R) Ethernet Connection (14) I219-V"
+  tags = {
+    Name = "denis-${count.index + 1}"
   }
+}
+
+resource "local_file" "tf_ip" {
+  content  = "[ALL]\n${aws_instance.denis[0].public_ip} ansible_ssh_user=ubuntu"
+  filename = "${path.module}/inventory"
 }
 
